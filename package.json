@@ -1,5 +1,6 @@
 {
   "name": "emoji-project",
+  "homepage": "https://al3xsus.github.io/emoji-project/",
   "version": "0.1.0",
   "private": true,
   "author": {
@@ -50,7 +51,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm build",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
