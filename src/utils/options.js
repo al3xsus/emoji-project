@@ -1,0 +1,1 @@
+export default [{ val: "option-1", lab: "Option 1" }, { val: "option-2", lab: "Option 2" }, { val: "option-3", lab: "Option 3" }]

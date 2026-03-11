@@ -1,56 +1,73 @@
 <script>
-  import { fly } from 'svelte/transition';
-  import { theme } from './stores/theme.js';
-  import ThemeToggle from './components/ThemeToggle.svelte';
-  import ButtonsView from './views/ButtonsView.svelte';
-  import RadiosView from './views/RadiosView.svelte';
-  import InputsView from './views/InputsView.svelte';
+  import { fly } from "svelte/transition";
+  import { theme } from "./stores/theme.js";
+  import ThemeToggle from "./components/ThemeToggle.svelte";
+  import Emojiicon from "./components/EmojiIcon.svelte";
+  import ButtonsView from "./views/ButtonsView.svelte";
+  import RadiosView from "./views/RadiosView.svelte";
+  import CheckboxesView from "./views/CheckboxesView.svelte";
+  import DashboardView from "./views/DashboardView.svelte";
+  import IconsView from "./views/IconsView.svelte";
+  import EmojiClock from "./views/EmojiClock.svelte";
 
-  let currentView = 'buttons';
+  let activeComponent;
+
+  let currentView = "icons";
 
   const views = [
-    { id: 'buttons', label: '🔘 Buttons', component: ButtonsView },
-    { id: 'radios', label: '⚪ Radios', component: RadiosView },
-    { id: 'inputs', label: '📝 Inputs', component: InputsView }
+    { id: "icons", label: "🖼️ Icons", component: IconsView },
+    { id: "buttons", label: "🆗 Buttons", component: ButtonsView },
+    { id: "radios", label: "⚪ Radios", component: RadiosView },
+    { id: "checkboxes", label: "☑️ Checkboxes", component: CheckboxesView },
+    { id: "dashboard", label: "📊 Dashboard", component: DashboardView },
   ];
 
   function setView(viewId) {
     currentView = viewId;
   }
 
-  $: activeComponent = views.find(v => v.id === currentView)?.component;
+  $: activeComponent = views.find((v) => v.id === currentView)?.component;
 </script>
 
 <div class="app">
   <!-- Navbar -->
-  <nav class="navbar">
+  <nav class="navbar" aria-label="Main Navigation">
     <div class="navbar-container">
       <div class="navbar-brand">
-        <span class="brand-icon">🎨</span>
+        <span role="img" aria-label="Palette Logo" class="brand-icon">🎨</span>
         <span class="brand-text">Emoji UI</span>
       </div>
-      
-      <div class="navbar-tabs">
+
+      <div class="navbar-tabs" role="tablist">
         {#each views as view}
           <button
+            role="tab"
+            id="tab-{view.id}"
             class="nav-tab"
             class:active={currentView === view.id}
+            aria-selected={currentView === view.id}
+            aria-controls="panel-{view.id}"
             on:click={() => setView(view.id)}
           >
-            {view.label}
+            <Emojiicon icon={view.label.split(" ")[0]} deco={true} />
+            {view.label.split(" ")[1]}
           </button>
         {/each}
       </div>
-      
+
       <ThemeToggle />
+      <EmojiClock/>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main class="main-content">
+  <main class="main-content" id="main-area">
     <div class="content-container">
       {#key currentView}
         <div
+          role="tabpanel"
+          id="panel-{currentView}"
+          aria-labelledby="tab-{currentView}"
           in:fly={{ y: 20, duration: 300, delay: 150 }}
           out:fly={{ y: -20, duration: 150 }}
         >
@@ -173,4 +190,3 @@
     }
   }
 </style>
-
